@@ -31,6 +31,8 @@ dependencies:
   esys_flutter_share: ^1.0.2
   fluttericon: ^1.0.7
   footer: ^0.0.3
+  percent_indicator: ^2.1.8
+  carousel_pro: ^1.0.0
 
 
 dev_dependencies:

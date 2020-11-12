@@ -230,7 +230,10 @@ class _CameraScreenState extends State {
 
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Identificada()),
+        MaterialPageRoute(
+            builder: (context) => NaoIdentificada(
+                //porcentagem: 0.75
+                )),
       );
     } catch (e) {
       _showCameraException(e);
