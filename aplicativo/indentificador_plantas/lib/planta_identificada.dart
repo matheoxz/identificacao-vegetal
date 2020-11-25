@@ -1,22 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:footer/footer.dart';
 import 'package:footer/footer_view.dart';
+import 'package:identificador_plantas/helpers/database_helper.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 
 class Identificada extends StatefulWidget {
   final double porcentagem;
+  final int idPlanta;
 
-  Identificada({this.porcentagem});
+  Identificada({this.porcentagem, this.idPlanta});
 
   @override
   _IdentificadaState createState() =>
-      _IdentificadaState(porcentagem: porcentagem);
+      _IdentificadaState(porcentagem: porcentagem, idPlanta: idPlanta);
 }
 
 class _IdentificadaState extends State<Identificada> {
   final double porcentagem;
-  _IdentificadaState({this.porcentagem});
+  final int idPlanta;
+
+  String nomePlanta, categoria, descricao;
+  List<Image> imagens = [];
+
+  final dbHelper = DatabaseHelper.instance;
+  _IdentificadaState({this.porcentagem, this.idPlanta});
+
+  @override
+  void initState() {
+    returnNomePlanta().then((result) {
+      setState(() {
+        nomePlanta = result[0]['nome'];
+        categoria = result[0]['categoria'];
+        descricao = result[0]['descricao'];
+      });
+    });
+    returnImagemPlanta().then((result) {
+      setState(() {
+        for (final i in result) {
+          imagens.add(Image.asset(i['imagem']));
+        }
+        ;
+      });
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> returnNomePlanta() async {
+    return await dbHelper.idPlantaToNomePlanta(idPlanta);
+  }
+
+  Future<List<Map<String, dynamic>>> returnImagemPlanta() async {
+    return await dbHelper.idPlantaToImagePlanta(idPlanta);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,14 +72,7 @@ class _IdentificadaState extends State<Identificada> {
               child: Carousel(
                 dotSize: 4,
                 dotBgColor: Colors.white.withOpacity(0),
-                images: [
-                  NetworkImage(
-                      'https://conteudo.imguol.com.br/blogs/221/files/2020/03/iStock-1195760577.jpg'),
-                  NetworkImage(
-                      'https://www.manacapaisagismo.com.br/wp-content/uploads/2018/05/ora-pro-nobis.jpg'),
-                  NetworkImage(
-                      'https://conteudo.imguol.com.br/c/entretenimento/85/2020/08/28/ora-pro-nobis-1598644031343_v2_450x337.jpg'),
-                ],
+                images: imagens,
               ),
             ),
             Container(
@@ -53,7 +82,7 @@ class _IdentificadaState extends State<Identificada> {
                 children: [
                   Chip(
                     label: Text(
-                      'Comestível',
+                      categoria,
                       style: TextStyle(color: Colors.white),
                     ),
                     backgroundColor: Colors.lightGreen[600],
@@ -64,18 +93,14 @@ class _IdentificadaState extends State<Identificada> {
             Container(
               margin: EdgeInsets.only(left: 15, right: 15),
               child: Text(
-                'Ora-pró-nobis',
+                nomePlanta,
                 style: TextStyle(fontSize: 40),
               ),
             ),
             Container(
               margin: EdgeInsets.all(15),
               child: Text(
-                '''Pereskia aculeata, popularmente conhecida como ora-pro-nóbis (do latim ora pro nobis: 'ora por nós'), orabrobó, lobrobó ou lobrobô, é uma cactácea trepadeira folhosa. É uma planta bastante rara, rústica, perene, desenvolvendo-se bem em vários tipos de solo, tanto à sombra como ao sol. Muito usada em cercas vivas, mas suas folhas e frutos, que são bagas amarelas e redondas, também servem como alimento.[2] A planta é também empregada para a produção de mel.[3][4]
-
-É originária do continente americano, onde tem ampla distribuição - desde o sul dos Estados Unidos até a Argentina, passando pelas ilhas do Caribe. Planta perene, rústica e resistente à seca, é a única espécie do gênero Pereskia que tem hábito de liana. No Brasil, ocorre em florestas perenifólias, nos estados de Maranhão, Ceará, Pernambuco, Alagoas, Sergipe, Bahia, Minas Gerais, Espírito Santo e Rio de Janeiro.[5]
-
-A denominação do gênero Pereskia refere-se ao botânico francês Nicolas-Claude Fabri de Peiresc, e o termo aculeata (do latim ăcŭlĕus, 'agulha' ou 'espinho') significa dotado de espinhos. Já o nome popular da planta, segundo a tradição, teria sido criado por pessoas que colhiam suas folhas no quintal de um padre, enquanto este rezava uma ladainha, cujo refrão, Ora pro nobis, era repetido a cada invocação.''',
+                descricao,
                 style: TextStyle(fontSize: 15),
                 textAlign: TextAlign.justify,
               ),

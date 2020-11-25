@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'helpers/database_helper.dart';
 
 import 'camera_screen.dart';
 

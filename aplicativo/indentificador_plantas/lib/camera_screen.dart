@@ -1,11 +1,13 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:identificador_plantas/helpers/database_helper.dart';
 import 'package:identificador_plantas/planta_nao_identificada.dart';
 import 'package:identificador_plantas/planta_identificada.dart';
 
 import 'preview_screen.dart';
 import 'historico.dart';
+import 'main.dart';
 
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -21,6 +23,7 @@ class _CameraScreenState extends State {
   List cameras;
   int selectedCameraIndex;
   String imgPath;
+  final dbHelper = DatabaseHelper.instance;
 
   @override
   void initState() {
@@ -228,15 +231,15 @@ class _CameraScreenState extends State {
           join((await getTemporaryDirectory()).path, '${DateTime.now()}.png');
       await controller.takePicture(path);
 
-      Navigator.push(
+      int res = await dbHelper.insertObservacao(2);
+      print(res);
+      await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => NaoIdentificada(
-                //porcentagem: 0.75
-                )),
+            builder: (context) => Identificada(idPlanta: 2, porcentagem: 0.75)),
       );
     } catch (e) {
-      _showCameraException(e);
+      print(e);
     }
   }
 
