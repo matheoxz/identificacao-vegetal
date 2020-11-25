@@ -14,7 +14,7 @@
  * Urtiga
  
  Para treinar a rede é necessário um dataset, devido à pandemia, não era possível fotografar as espécies em campo, portanto estas foram tiradas do Google Imagens e normalizadas.
-   ![alt text](https://github.com/matheoxz/identificacao-vegetal/blob/master/.imagens_readme/Screenshot%20from%202020-11-25%2019-29-52.png)
+<br>   ![alt text](https://github.com/matheoxz/identificacao-vegetal/blob/master/.imagens_readme/Screenshot%20from%202020-11-25%2019-29-52.png)
 
 ## google-images-minerador
   Para conseguir várias imagens das PANCs desejadas, foi construído um minerador de dados com a biblioteca Selenium, que a partir de um arquivo .csv e pesquisa no Google Imagens cada palavra no arquivo com uma Palavra Chave e baixa todas as imagens ali presentes.
