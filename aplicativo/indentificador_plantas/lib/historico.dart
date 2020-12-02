@@ -5,16 +5,23 @@ import 'package:identificador_plantas/card_historico.dart';
 
 import 'package:identificador_plantas/helpers/database_helper.dart';
 
+///Widget que gera a página de histórico de observações, deve puxar todas as observações do banco de dados e mostrar em cards.
+///Performa pesquisa das observações no banco de dados.
+///Ao clicar no card se é redirecionado à página da planta, com suas informações.
 class Historico extends StatefulWidget {
   @override
   _HistoricoState createState() => _HistoricoState();
 }
 
 class _HistoricoState extends State<Historico> {
+  //instancia do Banco de Dados
   final dbHelper = DatabaseHelper.instance;
+  //lista que armazena os resultados do BD
   List<Map<String, dynamic>> historico;
+  //lista dos cards que serão mostrados
   List<CardHistorico> cards = [];
 
+  /// Inicia o estado do Widget, puxando todas as observações do BD
   @override
   void initState() {
     returnObservacoes().then((results) {
@@ -24,10 +31,12 @@ class _HistoricoState extends State<Historico> {
     });
   }
 
+  /// função responsável por puxar todas as observações do BD
   Future<List<Map<String, dynamic>>> returnObservacoes() async {
     return await dbHelper.observacoes();
   }
 
+  /// função que preence a lista de cards com os dados do BD
   void returnListCards() {
     for (final i in historico) {
       print(i);
@@ -38,8 +47,10 @@ class _HistoricoState extends State<Historico> {
     }
   }
 
+  /// método de construção do widget
   @override
   Widget build(BuildContext context) {
+    //aguarda que o BD retorne os resultados, enquanto não chegarem mostra que está carregando
     if (historico == null) {
       return Container(
         child: Column(
@@ -47,6 +58,7 @@ class _HistoricoState extends State<Historico> {
           children: [CircularProgressIndicator()],
         ),
       );
+      // Se não houverem observações ainda, mostra uma página dizendo que aindão foi identificada nenhuma planta
     } else if (historico.length == 0) {
       return Scaffold(
           appBar: AppBar(
@@ -77,7 +89,9 @@ class _HistoricoState extends State<Historico> {
               ],
             ),
           ));
+      //caso hajam observações registradas, mostra a barra de pesquisa e os cards.
     } else {
+      //carrega a lista dos cards
       returnListCards();
       return Scaffold(
         appBar: AppBar(
@@ -87,6 +101,7 @@ class _HistoricoState extends State<Historico> {
           bottom: AppBar(
             automaticallyImplyLeading: false,
             actions: [
+              //botão de busca
               IconButton(
                   icon: Icon(
                     Icons.search,
@@ -98,6 +113,7 @@ class _HistoricoState extends State<Historico> {
             ],
             title: Container(
               height: 50,
+              //barra de pesquisa
               child: TextField(
                 decoration: InputDecoration(
                     labelText: 'Pesquisar',
@@ -113,6 +129,7 @@ class _HistoricoState extends State<Historico> {
           ),
         ),
         body: ListView(
+          //mostra os cards
           children: cards,
         ),
       );

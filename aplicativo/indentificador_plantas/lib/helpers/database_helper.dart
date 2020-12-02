@@ -1,15 +1,28 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:intl/intl.dart';
 
+///Classe responsável por iniciar o banco de dados e gerenciar as operações de CRUD.
+/// São criadas as tabelas:
+/// - Planta
+/// - Observação
+/// - ImagemPlanta
+///
+/// São populadas as tabelas Planta e ImagemPlanta
+/// São deifinidos os métodos
+///
+/// - insertObservacao - para inserir na tabela Observação
+/// - observacoes - retorna todas as observações do BD
+/// - idPlantaToNomePlanta - retorna os dados da planta cujo id for passado
+/// - idPlantaToImagePlanta - retorna as imagens da planta cujo id for passado
 class DatabaseHelper {
+  //Metadados do BD
   static final _databaseName = 'AppPlantas.db';
   static final _databaseVersion = 3;
 
+  //Tabelas
   static final tablePlanta = 'planta';
   static final tableImagemPlanta = 'imagem_planta';
   static final tableObservacao = 'observacao';
@@ -28,7 +41,10 @@ class DatabaseHelper {
   static final columnDataHora = 'data_hora';
   static final columnLocalizacao = 'localizacao';
 
+  ///Construtor privado da classe
   DatabaseHelper._();
+
+  ///instancia do banco de dados
   static final DatabaseHelper instance = DatabaseHelper._();
 
   // only have a single app-wide reference to the database
@@ -49,7 +65,9 @@ class DatabaseHelper {
         version: _databaseVersion, onCreate: _onCreate);
   }
 
+  ///inicia o banco de dados, criando e populando as tabelas
   void _onCreate(Database db, int version) async {
+    //cria a tabela Planta
     await db.execute('''
           CREATE TABLE $tablePlanta (
             $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -57,16 +75,16 @@ class DatabaseHelper {
             $columnDescricao TEXT NOT NULL,
             $columnCategoria TEXT NOT NULL
           ); ''');
+    //cria a tabela ImagemPlanta
     await db.execute('''
-
           CREATE TABLE $tableImagemPlanta (
             $columnId INTEGER NOT NULL,
             $columnImagem TEXT NOT NULL,
             FOREIGN KEY ($columnId) REFERENCES planta (id),
 			      PRIMARY KEY ($columnId, $columnImagem)
           );''');
+    //cria a tabela Observação
     await db.execute('''
-
           CREATE TABLE $tableObservacao (
             $columnId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
             $columnIdPlanta INTEGER NOT NULL,
@@ -74,15 +92,15 @@ class DatabaseHelper {
             $columnLocalizacao TEXT,
             FOREIGN KEY ($columnIdPlanta) REFERENCES $tablePlanta ($columnId)
           );''');
+
+    //Insere os dados das plantas em ordem alfabetica na tabela Planta
     await db.execute('''
-          
           INSERT INTO $tablePlanta ($columnNome, $columnDescricao, $columnCategoria)
           VALUES ("Araruta",
           "A araruta é uma raíz normalmente consumida em forma de farinha que por não conter é um excelente substituto da farinha de trigo para fazer bolos, tortas, biscoitos, mingau e até para engrossar sopas e molhos, especialmente no caso de sensibilidade ao glúten ou mesmo doença celíaca.",
           "Comestível"
           );''');
     await db.execute('''
-
           INSERT INTO $tablePlanta ($columnNome, $columnDescricao, $columnCategoria)
           VALUES ("Beldroegão",
           "O Beldroegão (Talinum paniculatum) é uma PANC (Planta Alimentícia Não Convencional), da família das Talinaceas.\n
@@ -93,7 +111,6 @@ class DatabaseHelper {
           "Comestível"
           );''');
     await db.execute('''
-
           INSERT INTO $tablePlanta ($columnNome, $columnDescricao, $columnCategoria)
           VALUES ("Capiçoba",
           "Planta herbácea da família Asteraceae, das espécies Erechtites valerianaefolia DC. e Erechtites hieracifolia (L.).  \n
@@ -101,7 +118,6 @@ class DatabaseHelper {
           "Comestível"
           );''');
     await db.execute('''
-
           INSERT INTO $tablePlanta ($columnNome, $columnDescricao, $columnCategoria)
           VALUES ("Capuchinha",
           "A capuchinha é uma planta medicinal, também conhecida como chagas, mastruço e capuchinho, que pode ser utilizada no tratamento de infecção urinária, escorbuto e doenças na pele.\n
@@ -109,7 +125,6 @@ class DatabaseHelper {
           "Comestível"
           );''');
     await db.execute('''
-
           INSERT INTO $tablePlanta ($columnNome, $columnDescricao, $columnCategoria)
           VALUES ("Caruru",
           "O caruru, também conhecido como Caruru-de-Cuia, Caruru-Rôxo, Caruru-de-Mancha, Caruru-de-Porco, Caruru-de-Espinho, Bredo-de-Chifre, Bredo-de-Espinho, Bredo-vermelho ou Bredo, é uma planta medicinal que possui propriedades antibacterianas, anti-inflamatórias e é rica em cálcio, sendo utilizada com o objetivo de fortalecer os ossos e dentes, por exemplo.\n
@@ -117,7 +132,6 @@ class DatabaseHelper {
           "Comestível"
           );''');
     await db.execute('''
-
           INSERT INTO $tablePlanta ($columnNome, $columnDescricao, $columnCategoria)
           VALUES ("Ora-pro-nóbis",
           "A Ora Pro-nóbis é uma planta trepadeira cactácea folhosa que possue folhas e frutos que servem como alimento. Com propriedades e nutrientes fantásticos para a saúde e bem-estar das pessoas. Seu nome científico é Pereskia Aculetea, porém ela é mais conhecida por Ora-Pro-nóbis.\n
@@ -125,7 +139,6 @@ class DatabaseHelper {
           "Comestível"
           );''');
     await db.execute('''
-
           INSERT INTO $tablePlanta ($columnNome, $columnDescricao, $columnCategoria)
           VALUES ("Peixinho",
           "O peixinho é uma Planta alimentícia não convencional (Panc) de nome científico Stachys byzantina. Ele é nativo da Turquia, Armênia e Irã e pode ser encontrado facilmente em regiões de clima temperado como planta ornamental.\n
@@ -133,7 +146,6 @@ class DatabaseHelper {
           "Comestível"
           );''');
     await db.execute('''
-
           INSERT INTO $tablePlanta ($columnNome, $columnDescricao, $columnCategoria)
           VALUES ("Picão-preto",
           "Picão-preto é planta medicinal das mais conhecidas da América do Sul, amplamente utilizada no tratamento de inúmeras doenças dentre as quais inflamação, hipertensão, úlceras, diabetes e infecções de todos os tipos, que estão sendo validadas pela moderna pesquisa científica.\n
@@ -141,7 +153,6 @@ class DatabaseHelper {
           "Comestível"
           );''');
     await db.execute('''
-
           INSERT INTO $tablePlanta ($columnNome, $columnDescricao, $columnCategoria)
           VALUES ("Serralha",
           "A serralha (Sonchus oleraceus) é uma planta herbácea da familia Asteraceae, a família da alface, da carqueja e da alcachofra, dentre outras delícias, e até de outras PANCS, como o almeirão-de-árvore e o jambu.\n
@@ -149,7 +160,6 @@ class DatabaseHelper {
           "Comestível"
           );''');
     await db.execute('''
-
           INSERT INTO $tablePlanta ($columnNome, $columnDescricao, $columnCategoria)
           VALUES ("Taioba",
           "A taioba é um vegetal da família Aracaeae, cultivada geralmente em regiões tropicais do centro-sul americano e em alguns países da Ásia e África. Seu crescimento depende de grande disponibilidade de água, o que leva a sua ocorrência em florestas tropicais úmidas. No Brasil, faz parte da cultura de comunidades rurais e mesmo urbanas, principalmente nos estados da Bahia, Minas Gerais, Rio de Janeiro e Espírito Santo.\n
@@ -157,7 +167,6 @@ class DatabaseHelper {
           "Comestível"
           );''');
     await db.execute('''
-
           INSERT INTO $tablePlanta ($columnNome, $columnDescricao, $columnCategoria)
           VALUES ("Urtiga",
           "Algumas urtigas são chamadas de mansas, ou seja, não causam nenhuma reação. Porém, podem ser facilmente confundidas com as urtigas bravas, então muito cuidado ao manuseá-las e utilize sempre luvas para colhe-las. Após o cozimento, as folhas, até mesmo das bravas, são comestíveis e muitíssimo saborosas. São ricas em ferro, cálcio, proteínas e fibras, e são páreo duro com a ora-pro-nobis no quesito nutrientes. Para preparar as folhas basta lavar e deixar alguns minutos em água fervente. Dica: prove um pouco para ter certeza que não irá pinicar. Caso a urtiga seja muito brava, adicione um pouco de bicarbonato de sódio à água fervente. Use-as da mesma maneira que a couve e o espinafre - em refogados, recheios de tortas, pães, massas, sopas, escondidinho, molhos, enfim, tudo que sua criatividade gastronômica pedir. Também pode ser consumida como chá.
@@ -172,66 +181,76 @@ class DatabaseHelper {
           "Comestível"
           );''');
 
+    //insere as imagens das plantas na tabela ImagemPlanta
     await db.execute('''
           INSERT INTO imagem_planta (id, imagem)
-          VALUES (1, 'assets/images/Araruta/1.jpg');''');
+          VALUES (1, 'assets/Araruta/1.jpg');''');
 
     await db.execute('''
         INSERT INTO imagem_planta (id, imagem)
-        VALUES (1, 'assets/images/Araruta/2.jpg');''');
+        VALUES (1, 'assets/Araruta/2.jpg');''');
 
     await db.execute('''
         INSERT INTO imagem_planta (id, imagem)
-        VALUES (1, 'assets/images/Araruta/3.jpg');''');
+        VALUES (1, 'assets/Araruta/3.jpg');''');
 
     await db.execute('''
         INSERT INTO imagem_planta (id, imagem)
-        VALUES (2, 'assets/images/Beldroegão/1.jpg');''');
+        VALUES (2, 'assets/Beldroegão/1.jpg');''');
 
     await db.execute('''
         INSERT INTO imagem_planta (id, imagem)
-        VALUES (2, 'assets/images/Beldroegão/2.jpg');''');
+        VALUES (2, 'assets/Beldroegão/2.jpg');''');
 
     await db.execute('''
         INSERT INTO imagem_planta (id, imagem)
-        VALUES (2, 'assets/images/Beldroegão/3.jpg');''');
+        VALUES (2, 'assets/Beldroegão/3.jpg');''');
 
     await db.execute('''
         INSERT INTO imagem_planta (id, imagem)
-        VALUES (3, 'assets/images/Capiçoba/1.jpg');''');
+        VALUES (3, 'assets/Capiçoba/1.jpg');''');
 
     await db.execute('''
         INSERT INTO imagem_planta (id, imagem)
-        VALUES (3, 'assets/images/Capiçoba/2.jpg');''');
+        VALUES (3, 'assets/Capiçoba/2.jpg');''');
 
     await db.execute('''
         INSERT INTO imagem_planta (id, imagem)
-        VALUES (3, 'assets/images/Capiçoba/3.jpg');''');
+        VALUES (3, 'assets/Capiçoba/3.jpg');''');
+
+    //TODO: Inserir restante das imagens
   }
 
+  ///função responsável por inserir na tabela Observação
+  ///- int idPlanta - id da planta que se deseja registra a observação, funciona como foreign key no banco de dados
   Future<int> insertObservacao(int idPlanta) async {
+    //instancia o BD
     Database db = await instance.database;
-
+    //cria a inserção, armazenando o id da planta e a data e hora da observação
     Map<String, dynamic> row = {
       columnIdPlanta: idPlanta,
       columnDataHora: DateTime.now().toString(),
     };
+    //insere na tabela
     return await db.insert(tableObservacao, row);
   }
 
-  // All of the rows are returned as a list of maps, where each map is
-  // a key-value list of columns.
+  ///retorna tudo na tabela Observações
   Future<List<Map<String, dynamic>>> observacoes() async {
     Database db = await instance.database;
     return await db.query(tableObservacao);
   }
 
+  ///retorna os dados da planta cujo id for passado
+  ///- int idPlanta - id da planta que será buscado no BD
   Future<List<Map<String, dynamic>>> idPlantaToNomePlanta(int idPlanta) async {
     Database db = await instance.database;
     return await db.rawQuery(
         'SELECT * FROM $tablePlanta WHERE $columnId = $idPlanta', null);
   }
 
+  ///retorna as imagens da planta cujo id for passado
+  ///- int idPlanta - id da planta que será buscado no BD
   Future<List<Map<String, dynamic>>> idPlantaToImagePlanta(int idPlanta) async {
     Database db = await instance.database;
     return await db.rawQuery(

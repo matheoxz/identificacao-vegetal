@@ -2,17 +2,17 @@ import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:identificador_plantas/helpers/database_helper.dart';
-import 'package:identificador_plantas/planta_nao_identificada.dart';
 import 'package:identificador_plantas/planta_identificada.dart';
 
-import 'preview_screen.dart';
 import 'historico.dart';
-import 'main.dart';
 
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:fluttericon/elusive_icons.dart';
 
+///A classe CameraScreen é a tela inicial do aplicativo.
+///Nela estão presentes a Camera, o Botão de reconhecimento de planta e o botão de histórico.
+///Seus métodos são privados, deve funcionar como um Widget sem parâmetros.
 class CameraScreen extends StatefulWidget {
   @override
   _CameraScreenState createState() => _CameraScreenState();
@@ -25,6 +25,7 @@ class _CameraScreenState extends State {
   String imgPath;
   final dbHelper = DatabaseHelper.instance;
 
+  /// função de inicio do Widget, checa se existem cameras para usar e as requisita para uso, caso não seja possível, gera um erro.
   @override
   void initState() {
     super.initState();
@@ -44,6 +45,8 @@ class _CameraScreenState extends State {
     });
   }
 
+  ///Inicia o controlador da Câmera, adiconando o listener a ele e setando a resolução desejada
+  /// CameraDescription cameraDescription
   Future _initCameraController(CameraDescription cameraDescription) async {
     if (controller != null) {
       await controller.dispose();
@@ -70,6 +73,7 @@ class _CameraScreenState extends State {
     }
   }
 
+  ///Método build da classe, retorna a tela desejada com a Camera e os botões.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,21 +82,25 @@ class _CameraScreenState extends State {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              //Camera
               Expanded(
                 flex: 1,
                 child: _cameraPreviewWidget(),
               ),
+              //Barra verde de baixo da camera
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   height: 120,
                   width: double.infinity,
-                  //padding: EdgeInsets.all(5),
                   color: Colors.lightGreen[900],
+                  //Botões
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
+                      //botão de historico
                       _historyButton(context),
+                      //botão de identificação
                       _cameraControlWidget(context),
                       Spacer()
                     ],
@@ -106,7 +114,7 @@ class _CameraScreenState extends State {
     );
   }
 
-  /// Display Camera preview.
+  /// Widget que mostra o preview da Camera
   Widget _cameraPreviewWidget() {
     if (controller == null || !controller.value.isInitialized) {
       return const Text(
@@ -125,7 +133,7 @@ class _CameraScreenState extends State {
     );
   }
 
-  /// Display the control bar with buttons to take pictures
+  /// Mostra a barra de controle com o botão de reconhecimento de planta
   Widget _cameraControlWidget(context) {
     return Expanded(
       child: Align(
@@ -141,6 +149,7 @@ class _CameraScreenState extends State {
               ),
               backgroundColor: Colors.white,
               onPressed: () {
+                //invoca a função de reconhecimento de planta e muda de página
                 _onCapturePressed(context);
               },
             )
@@ -150,6 +159,7 @@ class _CameraScreenState extends State {
     );
   }
 
+  ///Botão do histórico de observações
   Widget _historyButton(context) {
     return Expanded(
       child: Align(
@@ -167,7 +177,7 @@ class _CameraScreenState extends State {
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    //abrir tela de histórico
+                    //abre tela de histórico
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Historico()),
@@ -180,73 +190,34 @@ class _CameraScreenState extends State {
     );
   }
 
-  /// Display a row of toggle to select the camera (or a message if no camera is available).
-  Widget _cameraToggleRowWidget() {
-    if (cameras == null || cameras.isEmpty) {
-      return Spacer();
-    }
-    CameraDescription selectedCamera = cameras[selectedCameraIndex];
-    CameraLensDirection lensDirection = selectedCamera.lensDirection;
-
-    return Expanded(
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: FlatButton.icon(
-          onPressed: _onSwitchCamera,
-          icon: Icon(
-            _getCameraLensIcon(lensDirection),
-            color: Colors.white,
-            size: 24,
-          ),
-          label: Text(
-            '${lensDirection.toString().substring(lensDirection.toString().indexOf('.') + 1).toUpperCase()}',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
-          ),
-        ),
-      ),
-    );
-  }
-
-  IconData _getCameraLensIcon(CameraLensDirection direction) {
-    switch (direction) {
-      case CameraLensDirection.back:
-        return CupertinoIcons.switch_camera;
-      case CameraLensDirection.front:
-        return CupertinoIcons.switch_camera_solid;
-      case CameraLensDirection.external:
-        return Icons.camera;
-      default:
-        return Icons.device_unknown;
-    }
-  }
-
+  /// mostra exceções e erros gerados pela camera
   void _showCameraException(CameraException e) {
     String errorText = 'Error:${e.code}\nError message : ${e.description}';
     print(errorText);
   }
 
+  /// Função responsável por tirar a foto, salvar, cortar e redimensionar para por na rede neural e muda para a página de acordo com o resultado
   void _onCapturePressed(context) async {
     try {
+      //salva a imagem num diretorio temporário
       final path =
           join((await getTemporaryDirectory()).path, '${DateTime.now()}.png');
       await controller.takePicture(path);
 
-      int res = await dbHelper.insertObservacao(2);
-      print(res);
+      //TODO: crop e resize na imagem para dimensões da rede neural
+
+      //TODO: usar rede neural
+
+      //guarda a observação feita no histórico
+      await dbHelper.insertObservacao(3);
+      //vai para a página da observação encontrada
       await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => Identificada(idPlanta: 2, porcentagem: 0.75)),
+            builder: (context) => Identificada(idPlanta: 3, porcentagem: 0.75)),
       );
     } catch (e) {
       print(e);
     }
-  }
-
-  void _onSwitchCamera() {
-    selectedCameraIndex =
-        selectedCameraIndex < cameras.length - 1 ? selectedCameraIndex + 1 : 0;
-    CameraDescription selectedCamera = cameras[selectedCameraIndex];
-    _initCameraController(selectedCamera);
   }
 }

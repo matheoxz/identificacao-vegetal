@@ -35,5 +35,16 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/Images/
+    - assets/Araruta/
+    - assets/Beldroegão/
+    - assets/Capiçoba/
+    - assets/Capuchinha/
+    - assets/Caruru/
+    - assets/Ora-pro-nóbis/
+    - assets/Peixinho/
+    - assets/Picão-preto/
+    - assets/Serralha/
+    - assets/Taioba/
+    - assets/Urtiga/
+
   

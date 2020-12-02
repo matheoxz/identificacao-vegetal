@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'helpers/database_helper.dart';
 
 import 'camera_screen.dart';
 
+//Inicia o aplicativo chamando a classe Home
 void main() => runApp(Home());
 
+/// A classe Home inicia o aplicativo, setando o tema e suas cores, a classe invoca a Classe CameraScreen como Tela Inicial
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
