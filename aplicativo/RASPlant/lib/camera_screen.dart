@@ -1,14 +1,18 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image/image.dart' as Imagem;
+import 'dart:io' as Io;
+import 'package:tflite/tflite.dart';
+
 import 'package:RASPlant/helpers/database_helper.dart';
 import 'package:RASPlant/planta_identificada.dart';
-
 import 'historico.dart';
 
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:fluttericon/elusive_icons.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 ///A classe CameraScreen é a tela inicial do aplicativo.
 ///Nela estão presentes a Camera, o Botão de reconhecimento de planta e o botão de histórico.
@@ -24,6 +28,7 @@ class _CameraScreenState extends State {
   int selectedCameraIndex;
   String imgPath;
   final dbHelper = DatabaseHelper.instance;
+  bool _busy = false;
 
   /// função de inicio do Widget, checa se existem cameras para usar e as requisita para uso, caso não seja possível, gera um erro.
   @override
@@ -77,7 +82,9 @@ class _CameraScreenState extends State {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+        body: ModalProgressHUD(
+      inAsyncCall: _busy,
+      child: Container(
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -111,7 +118,7 @@ class _CameraScreenState extends State {
           ),
         ),
       ),
-    );
+    ));
   }
 
   /// Widget que mostra o preview da Camera
@@ -196,25 +203,68 @@ class _CameraScreenState extends State {
     print(errorText);
   }
 
+  ///Função responsável por cortar a imagem num quadrado e redimensionar para 244x244, para uso na rede neural
+  Future<String> cropAndResizeImage(String imgPath) async {
+    String finalPath;
+    Imagem.Image image = Imagem.decodeImage(Io.File(imgPath).readAsBytesSync());
+    image = Imagem.copyResizeCropSquare(image, 224);
+    finalPath = join(
+        (await getTemporaryDirectory()).path, '${DateTime.now()}_crop.png');
+    image = Imagem.copyRotate(image, 90);
+    Io.File(finalPath).writeAsBytesSync(Imagem.encodePng(image));
+    return finalPath;
+  }
+
+  void onError(e) {
+    print(e);
+  }
+
   /// Função responsável por tirar a foto, salvar, cortar e redimensionar para por na rede neural e muda para a página de acordo com o resultado
   void _onCapturePressed(context) async {
+    String img;
+    setState(() {
+      _busy = true;
+    });
     try {
       //salva a imagem num diretorio temporário
       final path =
           join((await getTemporaryDirectory()).path, '${DateTime.now()}.png');
       await controller.takePicture(path);
 
-      //TODO: crop e resize na imagem para dimensões da rede neural
+      img = await cropAndResizeImage(path);
 
-      //TODO: usar rede neural
+      var res = await Tflite.loadModel(
+          model: 'assets/model.tflite',
+          labels: 'assets/labels.txt',
+          numThreads: 1, // defaults to 1
+          isAsset:
+              true, // defaults to true, set to false to load resources outside assets
+          useGpuDelegate:
+              false // defaults to false, set to true to use GPU delegate
+          );
+      print(res);
+      dynamic reg;
+      try {
+        reg = await Tflite.runModelOnImage(
+          path: img,
+        );
+      } catch (e) {
+        print(e);
+      } finally {
+        print(reg);
+        setState(() {
+          _busy = false;
+        });
+      }
 
       //guarda a observação feita no histórico
-      await dbHelper.insertObservacao(3);
+      await dbHelper.insertObservacao(reg[0]['index']);
       //vai para a página da observação encontrada
       await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => Identificada(idPlanta: 3, porcentagem: 0.75)),
+            builder: (context) => Identificada(
+                idPlanta: reg[0]['index'], porcentagem: reg[0]['confidence'])),
       );
     } catch (e) {
       print(e);

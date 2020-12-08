@@ -218,6 +218,18 @@ class DatabaseHelper {
         INSERT INTO imagem_planta (id, imagem)
         VALUES (3, 'assets/Capiçoba/3.jpg');''');
 
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (4, 'assets/Capuchinha/1.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (4, 'assets/Capuchinha/2.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (4, 'assets/Capuchinha/3.jpg');''');
+
     //TODO: Inserir restante das imagens
   }
 
