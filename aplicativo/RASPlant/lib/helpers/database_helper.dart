@@ -183,8 +183,8 @@ class DatabaseHelper {
 
     //insere as imagens das plantas na tabela ImagemPlanta
     await db.execute('''
-          INSERT INTO imagem_planta (id, imagem)
-          VALUES (1, 'assets/Araruta/1.jpg');''');
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (1, 'assets/Araruta/1.jpg');''');
 
     await db.execute('''
         INSERT INTO imagem_planta (id, imagem)
@@ -229,6 +229,90 @@ class DatabaseHelper {
     await db.execute('''
         INSERT INTO imagem_planta (id, imagem)
         VALUES (4, 'assets/Capuchinha/3.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (5, 'assets/Caruru/1.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (5, 'assets/Caruru/2.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (5, 'assets/Caruru/3.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (6, 'assets/Ora-pro-nóbis/1.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (6, 'assets/Ora-pro-nóbis/2.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (6, 'assets/Ora-pro-nóbis/3.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (7, 'assets/Peixinho/1.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (7, 'assets/Peixinho/2.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (7, 'assets/Peixinho/3.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (8, 'assets/Picão-preto/1.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (8, 'assets/Picão-preto/2.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (8, 'assets/Picão-preto/3.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (9, 'assets/Serralha/1.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (9, 'assets/Serralha/2.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (9, 'assets/Serralha/3.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (10, 'assets/Taioba/1.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (10, 'assets/Taioba/2.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (10, 'assets/Taioba/3.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (11, 'assets/Urtiga/1.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (11, 'assets/Urtiga/2.jpg');''');
+
+    await db.execute('''
+        INSERT INTO imagem_planta (id, imagem)
+        VALUES (11, 'assets/Urtiga/3.jpg');''');
 
     //TODO: Inserir restante das imagens
   }
