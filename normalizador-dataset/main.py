@@ -60,4 +60,4 @@ class NormalizadorDataset:
         print('Imagem '+path+ ' criada')
 
 
-NormalizadorDataset('../google-images-minerador/PANCS', 224)
+NormalizadorDataset('Photos', 224)

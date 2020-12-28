@@ -98,7 +98,7 @@ class _HistoricoState extends State<Historico> {
           title: Text('Histórico de Identificação'),
           centerTitle: true,
           automaticallyImplyLeading: true,
-          bottom: AppBar(
+          /*bottom: AppBar(
             automaticallyImplyLeading: false,
             actions: [
               //botão de busca
@@ -126,7 +126,7 @@ class _HistoricoState extends State<Historico> {
                         borderRadius: BorderRadius.all(Radius.circular(45)))),
               ),
             ),
-          ),
+          ),*/
         ),
         body: ListView(
           //mostra os cards

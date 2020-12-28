@@ -313,8 +313,6 @@ class DatabaseHelper {
     await db.execute('''
         INSERT INTO imagem_planta (id, imagem)
         VALUES (11, 'assets/Urtiga/3.jpg');''');
-
-    //TODO: Inserir restante das imagens
   }
 
   ///função responsável por inserir na tabela Observação

@@ -1,3 +1,4 @@
+import 'package:RASPlant/planta_nao_identificada.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -231,8 +232,10 @@ class _CameraScreenState extends State {
           join((await getTemporaryDirectory()).path, '${DateTime.now()}.png');
       await controller.takePicture(path);
 
+      ///corta a imagem e redimensiona para entrada na rede
       img = await cropAndResizeImage(path);
 
+      ///carrega o modelo da rede
       var res = await Tflite.loadModel(
           model: 'assets/model.tflite',
           labels: 'assets/labels.txt',
@@ -242,32 +245,61 @@ class _CameraScreenState extends State {
           useGpuDelegate:
               false // defaults to false, set to true to use GPU delegate
           );
-      print(res);
-      dynamic reg;
+
+      ///faz o reconhecimento da imagem e poe os resultados em recognitions
+      dynamic recognitions, recognitions1, recognitions2, recognitions3;
       try {
-        reg = await Tflite.runModelOnImage(
-          path: img,
-        );
+        recognitions = await Tflite.runModelOnImage(
+            path: img,
+            imageMean: 0, // defaults to 117.0
+            imageStd: 255, // defaults to 1.0
+            numResults: 3, // defaults to 5
+            threshold: 0.1, // defaults to 0.1
+            asynch: true);
+
+        recognitions1 = await Tflite.runModelOnImage(
+            path: img,
+            imageMean: 127.5, // defaults to 117.0
+            imageStd: 127.5, // defaults to 1.0
+            numResults: 3, // defaults to 5
+            threshold: 0.1, // defaults to 0.1
+            asynch: true);
       } catch (e) {
         print(e);
       } finally {
-        print(reg);
+        print('1');
+        print(recognitions);
+        print('2');
+        print(recognitions1);
+        print('3');
+        print(recognitions2);
+        print('4');
+        print(recognitions3);
         setState(() {
           _busy = false;
         });
       }
 
-      //guarda a observação feita no histórico
-      await dbHelper.insertObservacao(reg[0]['index']);
-      //vai para a página da observação encontrada
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => Identificada(
-                idPlanta: reg[0]['index'], porcentagem: reg[0]['confidence'])),
-      );
+      if (recognitions.length == 0 || recognitions[0]['confidence'] >= 0.6) {
+        //guarda a observação feita no histórico
+        await dbHelper.insertObservacao(int.parse(recognitions[0]['label']));
+        //vai para a página da observação encontrada
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Identificada(
+                  idPlanta: int.parse(recognitions[0]['label']),
+                  porcentagem: recognitions[0]['confidence'])),
+        );
+      } else {
+        await Navigator.push(context,
+            MaterialPageRoute(builder: (context) => NaoIdentificada()));
+      }
     } catch (e) {
       print(e);
+    } finally {
+      ///libera a rede neural
+      await Tflite.close();
     }
   }
 }
