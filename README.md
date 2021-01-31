@@ -53,15 +53,15 @@ Porém, em virtude do uso, para treino da rede neural, de um dataset limitado co
   # Bibliografia
   
   BALSE, Kundan. KundanBalse/Plant-Detection-Using-TensorFlow. GitHub. Disponível em: <https://github.com/KundanBalse/Plant-Detection-Using-TensorFlow>. Acesso em: 28 Dec. 2020.
-HOU, Alvin. CryoliteZ/Plants-Identification. GitHub. Disponível em: <https://github.com/CryoliteZ/Plants-Identification>. Acesso em: 28 Dec. 2020.
-KUMAR, Neeraj; BELHUMEUR, Peter N.; BISWAS, Arijit; et al. Leafsnap: A Computer Vision System for Automatic Plant Species Identification. Computer Vision – ECCV 2012, p. 502–516, 2012. Disponível em: <https://link.springer.com/chapter/10.1007%2F978-3-642-33709-3_36>. Acesso em: 15 Jun. 2019.
-LASSECK, Mario. Image-based Plant Species Identification with Deep Convolutional Neural Networks. [s.l.: s.n., s.d.]. Disponível em: <http://ceur-ws.org/Vol-1866/paper_174.pdf>. Acesso em: 28 Dec. 2020.
-LEE, Sue; CHANG, Yang; CHAN, Chee. LifeClef 2017 Plant Identification Challenge: Classifying Plants Using Generic-Organ Correlation Features. [s.l.: s.n., s.d.]. Disponível em: <http://ceur-ws.org/Vol-1866/paper_162.pdf>. Acesso em: 28 Dec. 2020.
-NGUYEN, Thi Thanh-Nhan; LE, Thi-Lan; VU, Hai; et al. Towards an Automatic Plant Identification System without Dedicated Dataset. International Journal of Machine Learning and Computing, v. 9, n. 1, p. 26–34, 2019.
-PATEL, Umang. umangjpatel/Plant-Classifier. GitHub. Disponível em: <https://github.com/umangjpatel/Plant-Classifier>. Acesso em: 28 Dec. 2020.
-RANGEL T. DE ALMEIDA, Gustavo; LOCATELLI SOARES, Virgílio; MOUTINHO DA PONTES, Márcio José; et al. Reconhecimento de Plantas Comestíveis Não Convencionais: Uma Análise de Métodos de Classificação Aplicados à Visão Computacional. Instituto de Engenharia e Geociências - Universidade Federal do Oeste do Pará, .
+HOU, Alvin. CryoliteZ/Plants-Identification. GitHub. Disponível em: <https://github.com/CryoliteZ/Plants-Identification>. Acesso em: 28 Dec. 2020. </br>
+KUMAR, Neeraj; BELHUMEUR, Peter N.; BISWAS, Arijit; et al. Leafsnap: A Computer Vision System for Automatic Plant Species Identification. Computer Vision – ECCV 2012, p. 502–516, 2012. Disponível em: <https://link.springer.com/chapter/10.1007%2F978-3-642-33709-3_36>. Acesso em: 15 Jun. 2019.</br>
+LASSECK, Mario. Image-based Plant Species Identification with Deep Convolutional Neural Networks. [s.l.: s.n., s.d.]. Disponível em: <http://ceur-ws.org/Vol-1866/paper_174.pdf>. Acesso em: 28 Dec. 2020.</br>
+LEE, Sue; CHANG, Yang; CHAN, Chee. LifeClef 2017 Plant Identification Challenge: Classifying Plants Using Generic-Organ Correlation Features. [s.l.: s.n., s.d.]. Disponível em: <http://ceur-ws.org/Vol-1866/paper_162.pdf>. Acesso em: 28 Dec. 2020.</br>
+NGUYEN, Thi Thanh-Nhan; LE, Thi-Lan; VU, Hai; et al. Towards an Automatic Plant Identification System without Dedicated Dataset. International Journal of Machine Learning and Computing, v. 9, n. 1, p. 26–34, 2019.</br>
+PATEL, Umang. umangjpatel/Plant-Classifier. GitHub. Disponível em: <https://github.com/umangjpatel/Plant-Classifier>. Acesso em: 28 Dec. 2020.</br>
+RANGEL T. DE ALMEIDA, Gustavo; LOCATELLI SOARES, Virgílio; MOUTINHO DA PONTES, Márcio José; et al. Reconhecimento de Plantas Comestíveis Não Convencionais: Uma Análise de Métodos de Classificação Aplicados à Visão Computacional. Instituto de Engenharia e Geociências - Universidade Federal do Oeste do Pará, .</br>
 SUN, Yu; LIU, Yuan; WANG, Guan; et al. Deep Learning for Plant Identification in Natural Environment. Computational Intelligence and Neuroscience, v. 2017, p. 1–6, 2017.
-VISHWAJITH, Sujith. sujithv28/Deep-Leafsnap. GitHub. Disponível em: <https://github.com/sujithv28/Deep-Leafsnap>. Acesso em: 28 Dec. 2020.
-WANG, Zhaobin; LI, Huale; ZHU, Ying; et al. Review of Plant Identification Based on Image Processing. Archives of Computational Methods in Engineering, v. 24, n. 3, p. 637–654, 2016.
-Flutter Documentation. flutter.dev. Disponível em: <https://flutter.dev/docs>.
+VISHWAJITH, Sujith. sujithv28/Deep-Leafsnap. GitHub. Disponível em: <https://github.com/sujithv28/Deep-Leafsnap>. Acesso em: 28 Dec. 2020.</br>
+WANG, Zhaobin; LI, Huale; ZHU, Ying; et al. Review of Plant Identification Based on Image Processing. Archives of Computational Methods in Engineering, v. 24, n. 3, p. 637–654, 2016.</br>
+Flutter Documentation. flutter.dev. Disponível em: <https://flutter.dev/docs>.</br>
 
