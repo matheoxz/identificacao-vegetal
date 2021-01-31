@@ -1,6 +1,6 @@
 # RASPlant
 
-  O RASPlant é um aplicativo desenvolvido em Flutter, com o objetivo de identificar Plantas Alimentícias Não Convencionais (PANCs) nativas da região do interior do estado de São Paulo através de fotos. Para identificar, foi desenvolvida uma rede neural convolucional com a bilioteca TensorFlow, que foi treinada para identificar 11 plantas:
+  O RASPlant é um aplicativo desenvolvido em Flutter, com o objetivo de identificar Plantas Alimentícias Não Convencionais (PANCs) nativas da região do interior do estado de São Paulo através de fotos. Para identificar, foi desenvolvida uma rede neural convolucional com a bilioteca TensorFlow, que foi treinada para identificar 8 plantas:
  * Araruta
  * Beldroegão
  * Capiçoba
@@ -8,10 +8,7 @@
  * Caruru
  * Ora-pro-nóbis
  * Peixinho
- * Picão Preto
- * Serralha
  * Taioba
- * Urtiga
  
  Para treinar a rede é necessário um dataset, devido à pandemia, não era possível fotografar as espécies em campo, portanto estas foram tiradas do Google Imagens e normalizadas.
 <br>   ![alt text](https://github.com/matheoxz/identificacao-vegetal/blob/master/.imagens_readme/Screenshot%20from%202020-11-25%2019-29-52.png)
